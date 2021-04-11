@@ -15,6 +15,8 @@ import com.unimelb.swen30006.wifimodem.WifiModem;
 import automail.Automail;
 import automail.MailItem;
 import automail.MailPool;
+import automail.WifiModemQuerier;
+
 
 /**
  * This class simulates the behaviour of AutoMail
@@ -31,6 +33,7 @@ public class Simulation {
     private static ArrayList<MailItem> MAIL_DELIVERED;
     private static double total_delay = 0;
     private static WifiModem wModem = null;
+	private static WifiModemQuerier ModemQuerier;
 
     public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
     	
@@ -65,6 +68,8 @@ public class Simulation {
         	System.out.println("Setting up Wifi Modem");
         	wModem = WifiModem.getInstance(Building.MAILROOM_LOCATION);
 			System.out.println(wModem.Turnon());
+			ModemQuerier = WifiModemQuerier.getInstance();
+			ModemQuerier.setWifi_modem(wModem);
 		} catch (Exception mException) {
 			mException.printStackTrace();
 		}
