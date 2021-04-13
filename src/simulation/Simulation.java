@@ -21,6 +21,8 @@ import automail.WifiModemQuerier;
  * This class simulates the behaviour of AutoMail
  */
 public class Simulation {
+	private static final double LOOKUP_UNIT = 0.1;
+
 	private static int NUM_ROBOTS;
 	private static double CHARGE_THRESHOLD;
 	private static boolean CHARGE_DISPLAY;
@@ -31,6 +33,9 @@ public class Simulation {
 
 	private static ArrayList<MailItem> MAIL_DELIVERED;
 	private static double total_delay = 0;
+	private static double total_billable_activity = 0;
+	private static double total_activity_cost = 0;
+	private static double total_service_cost = 0;
 	private static WifiModem wModem = null;
 	private static WifiModemQuerier ModemQuerier;
 
@@ -103,6 +108,7 @@ public class Simulation {
 			}
 			Clock.Tick();
 		}
+		finaliseChargeStats();
 		printResults();
 		System.out.println(wModem.Turnoff());
 	}
@@ -189,13 +195,17 @@ public class Simulation {
 		System.out.printf("Delay: %.2f%n", total_delay);
 		if (CHARGE_DISPLAY) {
 			System.out.println("Total number of items delivered: " + MAIL_DELIVERED.size());
-			System.out.println("Total billable activity: "); // TODO
-			System.out.println("Total activity cost: "); // TODO
-			System.out.println("Total service cost: "); // TODO
+			System.out.println("Total billable activity: " + total_billable_activity); // TODO total acctivity units
+			System.out.println("Total activity cost: " + total_activity_cost); // TODO
+			System.out.println("Total service cost: " + total_service_cost); // TODO
 			System.out.println("Total number of lookups: "
 					+ (ModemQuerier.getFailed_lookups() + ModemQuerier.getSuccess_lookups()));
 			System.out.println("Total number of successful lookups: " + ModemQuerier.getSuccess_lookups());
 			System.out.println("Total number of failed lookups: " + ModemQuerier.getFailed_lookups());
 		}
+	}
+
+	private static void finaliseChargeStats() {
+		total_billable_activity += (ModemQuerier.getFailed_lookups() + ModemQuerier.getSuccess_lookups()) * LOOKUP_UNIT;
 	}
 }
