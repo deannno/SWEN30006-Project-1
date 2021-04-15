@@ -47,6 +47,8 @@ public class WifiModemQuerier {
         for (int i = 0; i < service_fees.length; i++) {
             service_fees[i] = lookupServiceFee(i + Building.LOWEST_FLOOR);
         }
+        success_lookups = 0;
+        failed_lookups = 0;
     }
 
     /**

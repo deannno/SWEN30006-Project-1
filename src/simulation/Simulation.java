@@ -21,7 +21,8 @@ import automail.WifiModemQuerier;
  * This class simulates the behaviour of AutoMail
  */
 public class Simulation {
-	private static final double LOOKUP_UNIT = 0.1;
+	private static final double LOOKUP_ACTIVITY_UNIT = 0.1;
+	private static final double MOVE_ACTIVITY_UNIT = 5.0;
 
 	private static int NUM_ROBOTS;
 	private static double CHARGE_THRESHOLD;
@@ -108,7 +109,6 @@ public class Simulation {
 			}
 			Clock.Tick();
 		}
-		finaliseChargeStats();
 		printResults();
 		System.out.println(wModem.Turnoff());
 	}
@@ -168,8 +168,12 @@ public class Simulation {
 				MAIL_DELIVERED.add(deliveryItem);
 				System.out.printf("T: %3d > Delivered(%4d) [%s]%n", Clock.Time(), MAIL_DELIVERED.size(),
 						deliveryItem.toString());
-				// Calculate delivery score
+				// Calculate delivery score and other statistics
 				total_delay += calculateDeliveryDelay(deliveryItem);
+				total_billable_activity += deliveryItem.getFloorsMoved() * MOVE_ACTIVITY_UNIT
+						+ deliveryItem.getNum_lookups() * LOOKUP_ACTIVITY_UNIT;
+				total_activity_cost += deliveryItem.getCharge().getActivity_cost();
+				total_service_cost += deliveryItem.getCharge().getService_fee();
 			} else {
 				try {
 					throw new MailAlreadyDeliveredException();
@@ -195,17 +199,18 @@ public class Simulation {
 		System.out.printf("Delay: %.2f%n", total_delay);
 		if (CHARGE_DISPLAY) {
 			System.out.println("Total number of items delivered: " + MAIL_DELIVERED.size());
-			System.out.println("Total billable activity: " + total_billable_activity); // TODO total acctivity units
-			System.out.println("Total activity cost: " + total_activity_cost); // TODO
-			System.out.println("Total service cost: " + total_service_cost); // TODO
+
+			System.out.println("Total billable activity: " + total_billable_activity);
+
+			System.out.println("Total activity cost: " + total_activity_cost);
+			System.out.println("Total service cost: " + total_service_cost);
+
 			System.out.println("Total number of lookups: "
 					+ (ModemQuerier.getFailed_lookups() + ModemQuerier.getSuccess_lookups()));
+
 			System.out.println("Total number of successful lookups: " + ModemQuerier.getSuccess_lookups());
+
 			System.out.println("Total number of failed lookups: " + ModemQuerier.getFailed_lookups());
 		}
-	}
-
-	private static void finaliseChargeStats() {
-		total_billable_activity += (ModemQuerier.getFailed_lookups() + ModemQuerier.getSuccess_lookups()) * LOOKUP_UNIT;
 	}
 }
