@@ -18,6 +18,8 @@ public class MailItem {
     protected final int arrival_time;
     /** The weight in grams of the mail item */
     protected final int weight;
+    private int floors_moved;
+    private Charge charge;
 
     /**
      * Constructor for a MailItem
@@ -30,10 +32,14 @@ public class MailItem {
         this.id = String.valueOf(hashCode());
         this.arrival_time = arrival_time;
         this.weight = weight;
+        this.floors_moved = 0;
+        this.charge = new Charge();
+        estimateCharge();
     }
 
     @Override
     public String toString(){
+    	String.format("Charge: %2d | Cost: %2d | Fee: %2d | Activity: %2d", finaliseCharge(), charge.getActivityCost(), charge.getServiceFee(), charge.caculateActivityUnits(floors_moved));
         return String.format("Mail Item:: ID: %6s | Arrival: %4d | Destination: %2d | Weight: %4d", id, arrival_time, destination_floor, weight);
     }
 
@@ -68,6 +74,23 @@ public class MailItem {
    public int getWeight(){
        return weight;
    }
+   
+   /**
+    * increment the floors moved by the mail item
+    */
+   public void moveFloor() {
+	   floors_moved++;
+   }
+   
+   public double estimateCharge() {
+	   int estimated_floors_moved = destination_floor - 1;
+	   return charge.calculateCharge(estimated_floors_moved, destination_floor);
+   }
+   
+   public double finaliseCharge() {
+	   return charge.calculateCharge(floors_moved, destination_floor);
+   }
+   
    
 	static private int count = 0;
 	static private Map<Integer, Integer> hashMap = new TreeMap<Integer, Integer>();
