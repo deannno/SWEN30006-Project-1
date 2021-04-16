@@ -19,6 +19,8 @@ public class MailItem {
     /** The weight in grams of the mail item */
     protected final int weight;
 
+    public double chargeEstimate;
+
     /**
      * Constructor for a MailItem
      * @param dest_floor the destination floor intended for this mail item
@@ -30,6 +32,8 @@ public class MailItem {
         this.id = String.valueOf(hashCode());
         this.arrival_time = arrival_time;
         this.weight = weight;
+
+        this.chargeEstimate = 0;
     }
 
     @Override
@@ -79,4 +83,13 @@ public class MailItem {
 		if (hash == null) { hash = count++; hashMap.put(hash0, hash); }
 		return hash;
 	}
+
+
+	public void finaliseCharge(){
+	    return;
+    }
+
+	public double estimateCharge(){
+	    return 0;
+    }
 }

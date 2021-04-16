@@ -1,5 +1,6 @@
 package automail;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Comparator;
 import java.util.ListIterator;
@@ -39,12 +40,32 @@ public class MailPool {
 	}
 	
 	private LinkedList<Item> pool;
+	private LinkedList<Item> priorityPool;
+
 	private LinkedList<Robot> robots;
+
+
+
+	private double chargeThreshold;
+
+	public MailPool(int nrobots, double chargeThreshold){
+		// Start empty
+		pool = new LinkedList<Item>();
+		priorityPool = new LinkedList<Item>();
+
+		robots = new LinkedList<Robot>();
+		this.chargeThreshold = chargeThreshold;
+
+	}
 
 	public MailPool(int nrobots){
 		// Start empty
 		pool = new LinkedList<Item>();
+		priorityPool = new LinkedList<Item>();
+
 		robots = new LinkedList<Robot>();
+		this.chargeThreshold = 0;
+
 	}
 
 	/**
@@ -53,8 +74,19 @@ public class MailPool {
      */
 	public void addToPool(MailItem mailItem) {
 		Item item = new Item(mailItem);
-		pool.add(item);
-		pool.sort(new ItemComparator());
+
+		item.mailItem.chargeEstimate =  item.mailItem.estimateCharge();
+
+		if (item.mailItem.chargeEstimate > chargeThreshold){
+
+			priorityPool.add(item);
+			priorityPool.sort(new ItemComparator());
+		}
+		else {
+
+			pool.add(item);
+			pool.sort(new ItemComparator());
+		}
 	}
 	
 	
@@ -63,6 +95,9 @@ public class MailPool {
      * load up any waiting robots with mailItems, if any.
      */
 	public void loadItemsToRobot() throws ItemTooHeavyException {
+
+		updatePools();
+
 		//List available robots
 		ListIterator<Robot> i = robots.listIterator();
 		while (i.hasNext()) loadItem(i);
@@ -72,18 +107,45 @@ public class MailPool {
 	private void loadItem(ListIterator<Robot> i) throws ItemTooHeavyException {
 		Robot robot = i.next();
 		assert(robot.isEmpty());
+
 		// System.out.printf("P: %3d%n", pool.size());
+
+		ListIterator<Item> k = priorityPool.listIterator();
 		ListIterator<Item> j = pool.listIterator();
-		if (pool.size() > 0) {
+
+
+		if(priorityPool.size() > 0){
+
 			try {
-			robot.addToHand(j.next().mailItem); // hand first as we want higher priority delivered first
-			j.remove();
-			if (pool.size() > 0) {
-				robot.addToTube(j.next().mailItem);
-				j.remove();
+				robot.addToHand(k.next().mailItem);
+				k.remove();
+
+				if (priorityPool.size() > 0){
+					robot.addToTube(k.next().mailItem);
+					k.remove();
+				} else if (pool.size() >0 ){
+
+					robot.addToTube(j.next().mailItem);
+					j.remove();
+				}
+
+				robot.dispatch();
+				i.remove();
+
+			} catch (Exception e){
+				throw e;
 			}
-			robot.dispatch(); // send the robot off if it has any items to deliver
-			i.remove();       // remove from mailPool queue
+
+		} else if (pool.size() > 0) {
+			try {
+				robot.addToHand(j.next().mailItem); // hand first as we want higher priority delivered first
+				j.remove();
+				if (pool.size() > 0) {
+					robot.addToTube(j.next().mailItem);
+					j.remove();
+				}
+				robot.dispatch(); // send the robot off if it has any items to deliver
+				i.remove();       // remove from mailPool queue
 			} catch (Exception e) { 
 	            throw e; 
 	        } 
@@ -97,4 +159,35 @@ public class MailPool {
 		robots.add(robot);
 	}
 
+	// updates the priority items within the MailPool
+	private void updatePools(){
+
+		Iterator<Item> it = this.pool.listIterator();
+
+		while(it.hasNext()){
+
+			Item item = it.next();
+			item.mailItem.chargeEstimate = item.mailItem.estimateCharge();
+
+			if(item.mailItem.chargeEstimate > chargeThreshold){
+
+				it.remove();
+				priorityPool.add(item);
+			}
+
+		}
+	}
+
+	/**
+	 *
+	 * @param chargeThreshold The new charge threshold to separate priority items from non-priority items
+	 */
+
+	public void setChargeThreshold(double chargeThreshold) {
+
+		if (chargeThreshold > this.chargeThreshold){
+			this.chargeThreshold = chargeThreshold;
+		}
+
+	}
 }

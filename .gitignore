@@ -93,3 +93,8 @@ src/exceptions/ItemTooHeavyException.html
 src/exceptions/MailAlreadyDeliveredException.html
 src/exceptions/package-summary.html
 src/exceptions/package-tree.html
+
+# intellij configs
+.idea/
+Automail.iml
+*.class
