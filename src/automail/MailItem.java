@@ -41,7 +41,7 @@ public class MailItem {
 
     @Override
     public String toString(){
-    	String.format("Charge: %2d | Cost: %2d | Fee: %2d | Activity: %2d", finaliseCharge(), charge.getActivityCost(), charge.getServiceFee(), charge.caculateActivityUnits(floors_moved));
+    	String.format("Charge: %2d | Cost: %2d | Fee: %2d | Activity: %2d", finaliseCharge(), charge.getActivityCost(), charge.getServiceFee(), charge.calculateActivityUnits(floors_moved));
         return String.format("Mail Item:: ID: %6s | Arrival: %4d | Destination: %2d | Weight: %4d", id, arrival_time, destination_floor, weight);
     }
 
@@ -104,13 +104,4 @@ public class MailItem {
 		if (hash == null) { hash = count++; hashMap.put(hash0, hash); }
 		return hash;
 	}
-
-
-	public void finaliseCharge(){
-	    return;
-    }
-
-	public double estimateCharge(){
-	    return 0;
-    }
 }

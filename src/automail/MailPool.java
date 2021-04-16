@@ -75,9 +75,8 @@ public class MailPool {
 	public void addToPool(MailItem mailItem) {
 		Item item = new Item(mailItem);
 
-		item.mailItem.chargeEstimate =  item.mailItem.estimateCharge();
 
-		if (item.mailItem.chargeEstimate > chargeThreshold){
+		if (item.mailItem.estimateCharge() > chargeThreshold){
 
 			priorityPool.add(item);
 			priorityPool.sort(new ItemComparator());
@@ -167,9 +166,8 @@ public class MailPool {
 		while(it.hasNext()){
 
 			Item item = it.next();
-			item.mailItem.chargeEstimate = item.mailItem.estimateCharge();
 
-			if(item.mailItem.chargeEstimate > chargeThreshold){
+			if(item.mailItem.estimateCharge() > chargeThreshold){
 
 				it.remove();
 				priorityPool.add(item);

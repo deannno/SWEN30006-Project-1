@@ -4,7 +4,7 @@ public class Charge {
 	public static double activity_unit_price = 0.224;
 	public static double markup_percentage = 0.059;
 	private int num_lookups;
-	private int extra_cost;
+	private double extra_cost = 0.0;
 	private double activity_cost;
 	private double service_fee;
 	
@@ -20,15 +20,22 @@ public class Charge {
 		return activity_cost;
 	}
 	
-	public double caculateActivityUnits(int floors_moved) {
-		return (5 * floors_moved + 0.1 * num_lookups);
+	public double calculateActivityUnits(int floors_moved) {
+		int lookups_charged;
+		if (num_lookups > 0)  {
+			lookups_charged = 1;
+		}
+		else {
+			lookups_charged = 0;
+		}
+		return (5 * floors_moved + 0.1 * lookups_charged);
 	}
 	
 	public double calculateCharge(int floors_moved, int destination_floor) {
 		double bill_charged;
-		activity_cost = activity_unit_price * caculateActivityUnits(floors_moved);
+		activity_cost = activity_unit_price * calculateActivityUnits(floors_moved);
 		service_fee = lookupServiceFee(destination_floor);
-		bill_charged = (service_fee + activity_cost) * (1 + markup_percentage);
+		bill_charged = (service_fee + activity_cost + extra_cost) * (1 + markup_percentage);
 		return bill_charged;
 	}
 	
