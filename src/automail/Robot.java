@@ -27,6 +27,8 @@ public class Robot {
     private MailItem tube = null;
     
     private int deliveryCounter;
+
+    private int floorsMoved;
     
 
     /**
@@ -45,6 +47,8 @@ public class Robot {
         this.mailPool = mailPool;
         this.receivedDispatch = false;
         this.deliveryCounter = 0;
+
+        this.floorsMoved = 0;
     }
     
     /**
@@ -58,12 +62,15 @@ public class Robot {
      * This is called on every time step
      * @throws ExcessiveDeliveryException if robot delivers more than the capacity of the tube without refilling
      */
-    public void operate() throws ExcessiveDeliveryException {   
+    public void operate() throws ExcessiveDeliveryException {
     	switch(current_state) {
     		/** This state is triggered when the robot is returning to the mailroom after a delivery */
     		case RETURNING:
     			/** If its current position is at the mailroom, then the robot should change state */
                 if(current_floor == Building.MAILROOM_LOCATION){
+
+                    floorsMoved = 0;
+
                 	if (tube != null) {
                 		mailPool.addToPool(tube);
                         System.out.printf("T: %3d > old addToPool [%s]%n", Clock.Time(), tube.toString());
@@ -89,6 +96,9 @@ public class Robot {
     		case DELIVERING:
     			if(current_floor == destination_floor){ // If already here drop off either way
                     /** Delivery complete, report this to the simulator! */
+
+                    deliveryItem.finaliseCharge();
+
                     delivery.deliver(deliveryItem);
                     deliveryItem = null;
                     deliveryCounter++;
@@ -112,6 +122,7 @@ public class Robot {
     			}
                 break;
     	}
+
     }
 
     /**
@@ -127,6 +138,9 @@ public class Robot {
      * @param destination the floor towards which the robot is moving
      */
     private void moveTowards(int destination) {
+
+        floorsMoved++;
+
         if(current_floor < destination){
             current_floor++;
         } else {

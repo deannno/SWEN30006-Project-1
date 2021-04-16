@@ -21,6 +21,7 @@ public class MailItem {
     private int floors_moved;
     private Charge charge;
 
+
     /**
      * Constructor for a MailItem
      * @param dest_floor the destination floor intended for this mail item
@@ -35,6 +36,7 @@ public class MailItem {
         this.floors_moved = 0;
         this.charge = new Charge();
         estimateCharge();
+
     }
 
     @Override
@@ -102,4 +104,13 @@ public class MailItem {
 		if (hash == null) { hash = count++; hashMap.put(hash0, hash); }
 		return hash;
 	}
+
+
+	public void finaliseCharge(){
+	    return;
+    }
+
+	public double estimateCharge(){
+	    return 0;
+    }
 }
