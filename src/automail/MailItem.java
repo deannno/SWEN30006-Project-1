@@ -18,7 +18,6 @@ public class MailItem {
     protected final int arrival_time;
     /** The weight in grams of the mail item */
     protected final int weight;
-    private int floors_moved;
     private Charge charge;
 
 
@@ -33,7 +32,6 @@ public class MailItem {
         this.id = String.valueOf(hashCode());
         this.arrival_time = arrival_time;
         this.weight = weight;
-        this.floors_moved = 0;
         this.charge = new Charge();
         estimateCharge();
 
@@ -41,8 +39,15 @@ public class MailItem {
 
     @Override
     public String toString(){
-    	String.format("Charge: %2d | Cost: %2d | Fee: %2d | Activity: %2d", finaliseCharge(), charge.getActivityCost(), charge.getServiceFee(), charge.calculateActivityUnits(floors_moved));
         return String.format("Mail Item:: ID: %6s | Arrival: %4d | Destination: %2d | Weight: %4d", id, arrival_time, destination_floor, weight);
+    }
+    
+    public String printLog(boolean charge_display) {
+    	String log = toString();
+    	if (charge_display) {
+    		return log + String.format(" | Charge: %.2f | Cost: %.2f | Fee: %.2f | Activity: %.2f", charge.getTotalCharge(), charge.getActivityCost(), charge.getServiceFee(), charge.getActivityUnits());
+    	}
+    	return log;
     }
 
     /**
@@ -77,20 +82,17 @@ public class MailItem {
        return weight;
    }
    
-   /**
-    * increment the floors moved by the mail item
-    */
-   public void moveFloor() {
-	   floors_moved++;
+   public Charge getCharge() {
+	   return charge;
    }
    
-   public double estimateCharge() {
+   public void estimateCharge() {
 	   int estimated_floors_moved = destination_floor - 1;
-	   return charge.calculateCharge(estimated_floors_moved, destination_floor);
+	   charge.calculateCharge(estimated_floors_moved, destination_floor);
    }
    
-   public double finaliseCharge() {
-	   return charge.calculateCharge(floors_moved, destination_floor);
+   public void finaliseCharge(int floors_moved) {
+	   charge.calculateCharge(floors_moved, destination_floor);
    }
    
    

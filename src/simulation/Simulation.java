@@ -167,13 +167,12 @@ public class Simulation {
 			if (!MAIL_DELIVERED.contains(deliveryItem)) {
 				MAIL_DELIVERED.add(deliveryItem);
 				System.out.printf("T: %3d > Delivered(%4d) [%s]%n", Clock.Time(), MAIL_DELIVERED.size(),
-						deliveryItem.toString());
+						deliveryItem.printLog(CHARGE_DISPLAY));
 				// Calculate delivery score and other statistics
 				total_delay += calculateDeliveryDelay(deliveryItem);
-				total_billable_activity += deliveryItem.getFloorsMoved() * MOVE_ACTIVITY_UNIT
-						+ deliveryItem.getNum_lookups() * LOOKUP_ACTIVITY_UNIT;
-				total_activity_cost += deliveryItem.getCharge().getActivity_cost();
-				total_service_cost += deliveryItem.getCharge().getService_fee();
+				total_billable_activity += deliveryItem.getCharge().getActivityUnits();
+				total_activity_cost += deliveryItem.getCharge().getActivityCost();
+				total_service_cost += deliveryItem.getCharge().getServiceFee();
 			} else {
 				try {
 					throw new MailAlreadyDeliveredException();
