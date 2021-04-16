@@ -97,7 +97,7 @@ public class Robot {
     			if(current_floor == destination_floor){ // If already here drop off either way
                     /** Delivery complete, report this to the simulator! */
 
-                    deliveryItem.finaliseCharge();
+                    deliveryItem.finaliseCharge(floorsMoved);
 
                     delivery.deliver(deliveryItem);
                     deliveryItem = null;

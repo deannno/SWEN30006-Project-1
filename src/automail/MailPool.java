@@ -58,15 +58,6 @@ public class MailPool {
 
 	}
 
-	public MailPool(int nrobots){
-		// Start empty
-		pool = new LinkedList<Item>();
-		priorityPool = new LinkedList<Item>();
-
-		robots = new LinkedList<Robot>();
-		this.chargeThreshold = 0;
-
-	}
 
 	/**
      * Adds an item to the mail pool
@@ -75,17 +66,9 @@ public class MailPool {
 	public void addToPool(MailItem mailItem) {
 		Item item = new Item(mailItem);
 
+		pool.add(item);
+		pool.sort(new ItemComparator());
 
-		if (item.mailItem.estimateCharge() > chargeThreshold){
-
-			priorityPool.add(item);
-			priorityPool.sort(new ItemComparator());
-		}
-		else {
-
-			pool.add(item);
-			pool.sort(new ItemComparator());
-		}
 	}
 	
 	
@@ -167,7 +150,9 @@ public class MailPool {
 
 			Item item = it.next();
 
-			if(item.mailItem.estimateCharge() > chargeThreshold){
+			item.mailItem.estimateCharge();
+
+			if(item.mailItem.getCharge().getTotalCharge() > chargeThreshold){
 
 				it.remove();
 				priorityPool.add(item);
