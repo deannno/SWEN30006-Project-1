@@ -43,14 +43,19 @@ public class Charge {
 	
 	public void calculateCharge(int floors_moved, int destination_floor) {
 		activity_units = calculateActivityUnits(floors_moved);
-		activity_cost = activity_unit_price * activity_units;
-		service_fee = lookupServiceFee(destination_floor);
-		total_charge = (service_fee + activity_cost + extra_cost) * (1 + markup_percentage);
+		activity_cost = roundTwoDecimalPlaces(activity_unit_price * activity_units);
+		service_fee = roundTwoDecimalPlaces(lookupServiceFee(destination_floor));
+		total_charge = roundTwoDecimalPlaces((service_fee + activity_cost + extra_cost) * (1 + markup_percentage));
 	}
 	
 	public double lookupServiceFee(int floor) {
 		num_lookups++;
 		return WifiModemQuerier.getInstance().lookupServiceFee(floor);
+	}
+	
+	private double roundTwoDecimalPlaces(double number) {
+		double rounded = Math.round(number * 100.0) / 100.0;
+		return rounded;
 	}
 	
 }
