@@ -197,19 +197,19 @@ public class Simulation {
 		System.out.println("Final Delivery time: " + Clock.Time());
 		System.out.printf("Delay: %.2f%n", total_delay);
 		if (CHARGE_DISPLAY) {
-			System.out.println("Total number of items delivered: " + MAIL_DELIVERED.size());
+			System.out.printf("Total number of items delivered: %d%n", MAIL_DELIVERED.size());
 
-			System.out.println("Total billable activity: " + total_billable_activity);
+			System.out.printf("Total billable activity: %.2f%n", total_billable_activity);
 
-			System.out.println("Total activity cost: " + total_activity_cost);
-			System.out.println("Total service cost: " + total_service_cost);
+			System.out.printf("Total activity cost: %.2f%n", total_activity_cost);
+			System.out.printf("Total service cost: %.2f%n", total_service_cost);
 
-			System.out.println("Total number of lookups: "
-					+ (ModemQuerier.getFailed_lookups() + ModemQuerier.getSuccess_lookups()));
+			System.out.printf("Total number of lookups: %d%n",
+					(ModemQuerier.getFailed_lookups() + ModemQuerier.getSuccess_lookups()));
 
-			System.out.println("Total number of successful lookups: " + ModemQuerier.getSuccess_lookups());
+			System.out.printf("Total number of successful lookups: %d%n", ModemQuerier.getSuccess_lookups());
 
-			System.out.println("Total number of failed lookups: " + ModemQuerier.getFailed_lookups());
+			System.out.printf("Total number of failed lookups: %d%n", ModemQuerier.getFailed_lookups());
 		}
 	}
 }
