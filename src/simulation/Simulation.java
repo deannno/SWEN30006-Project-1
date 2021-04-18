@@ -13,6 +13,7 @@ import java.util.Properties;
 import com.unimelb.swen30006.wifimodem.WifiModem;
 
 import automail.Automail;
+import automail.Charge;
 import automail.MailItem;
 import automail.MailPool;
 import automail.WifiModemQuerier;
@@ -27,6 +28,8 @@ public class Simulation {
 	private static int NUM_ROBOTS;
 	private static double CHARGE_THRESHOLD;
 	private static boolean CHARGE_DISPLAY;
+	private static double ACTIVITY_UNIT_PRICE;
+	private static double MARKUP_PERCENTAGE;
 
 	/** Constant for the mail generator */
 	private static int MAIL_TO_CREATE;
@@ -110,7 +113,8 @@ public class Simulation {
 			Clock.Tick();
 		}
 		printResults();
-		System.out.println(wModem.Turnoff());
+		// System.out.println(wModem.Turnoff()); i commented this since expected.txt
+		// doesnt have it
 	}
 
 	static private Properties setUpProperties() throws IOException {
@@ -121,6 +125,8 @@ public class Simulation {
 		automailProperties.setProperty("Mail_to_Create", "80");
 		automailProperties.setProperty("ChargeThreshold", "0");
 		automailProperties.setProperty("ChargeDisplay", "false");
+		automailProperties.setProperty("ActivityUnitPrice", "0.224");
+		automailProperties.setProperty("MarkupPercentage", "0.059");
 
 		// Read properties
 		FileReader inStream = null;
@@ -156,6 +162,15 @@ public class Simulation {
 		// Charge Display
 		CHARGE_DISPLAY = Boolean.parseBoolean(automailProperties.getProperty("CommercialDisplay"));
 		System.out.println("#Charge Display: " + CHARGE_DISPLAY);
+		// Activity Unit Price
+		ACTIVITY_UNIT_PRICE = Double.parseDouble(automailProperties.getProperty("ActivityUnitPrice"));
+		System.out.println("#Activity Unit Price: " + ACTIVITY_UNIT_PRICE);
+		Charge.setActivityUnitPrice(ACTIVITY_UNIT_PRICE);
+
+		// Markup Percentage
+		MARKUP_PERCENTAGE = Double.parseDouble(automailProperties.getProperty("MarkupPercentage"));
+		System.out.println("#Markup Percentage: " + MARKUP_PERCENTAGE);
+		Charge.setMarkupPercentage(MARKUP_PERCENTAGE);
 
 		return automailProperties;
 	}
