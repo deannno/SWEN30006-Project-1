@@ -1,8 +1,8 @@
 package automail;
 
 public class Charge {
-	public static double activity_unit_price;
-	public static double markup_percentage;
+	private static double activity_unit_price;
+	private static double markup_percentage;
 	private int num_lookups;
 	private double extra_cost = 0.0;
 	private double activity_units;
@@ -61,8 +61,7 @@ public class Charge {
 	}
 
 	private double roundTwoDecimalPlaces(double number) {
-		double rounded = Math.round(number * 100.0) / 100.0;
-		return rounded;
+		return Math.round(number * 100.0) / 100.0;
 	}
 
 }
