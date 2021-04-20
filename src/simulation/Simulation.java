@@ -22,9 +22,6 @@ import automail.WifiModemQuerier;
  * This class simulates the behaviour of AutoMail
  */
 public class Simulation {
-	private static final double LOOKUP_ACTIVITY_UNIT = 0.1;
-	private static final double MOVE_ACTIVITY_UNIT = 5.0;
-
 	private static int NUM_ROBOTS;
 	private static double CHARGE_THRESHOLD;
 	private static boolean CHARGE_DISPLAY;

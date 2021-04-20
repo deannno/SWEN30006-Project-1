@@ -68,7 +68,6 @@ public class MailPool {
 
 		pool.add(item);
 		pool.sort(new ItemComparator());
-
 	}
 	
 	
@@ -156,6 +155,7 @@ public class MailPool {
 
 				it.remove();
 				priorityPool.add(item);
+				priorityPool.sort(new ItemComparator());
 			}
 
 		}

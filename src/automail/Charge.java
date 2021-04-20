@@ -1,6 +1,9 @@
 package automail;
 
 public class Charge {
+	private static final double LOOKUP_ACTIVITY_UNIT = 0.1;
+	private static final double MOVE_ACTIVITY_UNIT = 5.0;
+	
 	private static double activity_unit_price;
 	private static double markup_percentage;
 	private int num_lookups;
@@ -45,7 +48,7 @@ public class Charge {
 		} else {
 			lookups_charged = 0;
 		}
-		return (5 * floors_moved + 0.1 * lookups_charged);
+		return (MOVE_ACTIVITY_UNIT * floors_moved + LOOKUP_ACTIVITY_UNIT * lookups_charged);
 	}
 
 	public void calculateCharge(int floors_moved, int destination_floor) {
