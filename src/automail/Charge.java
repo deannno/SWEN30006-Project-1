@@ -3,7 +3,7 @@ package automail;
 public class Charge {
 	private static final double LOOKUP_ACTIVITY_UNIT = 0.1;
 	private static final double MOVE_ACTIVITY_UNIT = 5.0;
-	
+
 	private static double activity_unit_price;
 	private static double markup_percentage;
 	private int num_lookups;
@@ -59,8 +59,14 @@ public class Charge {
 	}
 
 	public double lookupServiceFee(int floor) {
-		num_lookups++;
-		return WifiModemQuerier.getInstance().lookupServiceFee(floor);
+		try {
+			num_lookups++;
+			return WifiModemQuerier.getInstance().lookupServiceFee(floor);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1.0;
+		}
+
 	}
 
 	private double roundTwoDecimalPlaces(double number) {

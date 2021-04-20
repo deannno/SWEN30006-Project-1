@@ -11,9 +11,18 @@ public class WifiModemQuerier {
     private double[] latest_service_fees;
     private WifiModem wifi_modem;
 
-    public static WifiModemQuerier getInstance() {
+    public static WifiModemQuerier getInstance() throws Exception {
+        if (SINGLE_INSTANCE == null) {
+            return getInstance(Building.MAILROOM_LOCATION);
+        }
+        return SINGLE_INSTANCE;
+    }
+
+    public static WifiModemQuerier getInstance(int installedFloor) throws Exception {
         if (SINGLE_INSTANCE == null) {
             SINGLE_INSTANCE = new WifiModemQuerier();
+            SINGLE_INSTANCE.wifi_modem = WifiModem.getInstance(installedFloor);
+            SINGLE_INSTANCE.instantiateServiceFees(SINGLE_INSTANCE.latest_service_fees);
         }
         return SINGLE_INSTANCE;
     }
@@ -26,11 +35,6 @@ public class WifiModemQuerier {
         success_lookups = 0;
         failed_lookups = 0;
         latest_service_fees = new double[Building.FLOORS];
-    }
-
-    public void setWifi_modem(WifiModem wifi_modem) {
-        this.wifi_modem = wifi_modem;
-        instantiateServiceFees(latest_service_fees);
     }
 
     /**
@@ -87,5 +91,13 @@ public class WifiModemQuerier {
 
     public int getSuccess_lookups() {
         return success_lookups;
+    }
+
+    public String TurnOn() throws Exception {
+        return wifi_modem.Turnon();
+    }
+
+    public String TurnOff() {
+        return wifi_modem.Turnoff();
     }
 }
