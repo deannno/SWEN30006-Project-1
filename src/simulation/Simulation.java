@@ -37,7 +37,6 @@ public class Simulation {
 	private static double total_billable_activity = 0;
 	private static double total_activity_cost = 0;
 	private static double total_service_cost = 0;
-	private static WifiModem wModem = null;
 	private static WifiModemQuerier ModemQuerier;
 
 	public static void main(String[] args)
@@ -74,11 +73,10 @@ public class Simulation {
 
 		// Install the modem & turn on the modem
 		try {
+			// new
 			System.out.println("Setting up Wifi Modem");
-			wModem = WifiModem.getInstance(Building.MAILROOM_LOCATION);
-			System.out.println(wModem.Turnon());
-			ModemQuerier = WifiModemQuerier.getInstance();
-			ModemQuerier.setWifi_modem(wModem);
+			ModemQuerier = WifiModemQuerier.getInstance(Building.MAILROOM_LOCATION);
+			System.out.println(ModemQuerier.TurnOn());
 		} catch (Exception mException) {
 			mException.printStackTrace();
 		}
@@ -161,12 +159,12 @@ public class Simulation {
 		System.out.println("#Charge Display: " + CHARGE_DISPLAY);
 		// Activity Unit Price
 		ACTIVITY_UNIT_PRICE = Double.parseDouble(automailProperties.getProperty("ActivityUnitPrice"));
-		System.out.println("#Activity Unit Price: " + ACTIVITY_UNIT_PRICE);
+		// System.out.println("#Activity Unit Price: " + ACTIVITY_UNIT_PRICE);
 		Charge.setActivityUnitPrice(ACTIVITY_UNIT_PRICE);
 
 		// Markup Percentage
 		MARKUP_PERCENTAGE = Double.parseDouble(automailProperties.getProperty("MarkupPercentage"));
-		System.out.println("#Markup Percentage: " + MARKUP_PERCENTAGE);
+		// System.out.println("#Markup Percentage: " + MARKUP_PERCENTAGE);
 		Charge.setMarkupPercentage(MARKUP_PERCENTAGE);
 
 		return automailProperties;
