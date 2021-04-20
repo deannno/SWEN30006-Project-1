@@ -63,15 +63,27 @@ public class MailPool {
      * Adds an item to the mail pool
      * @param mailItem the mail item being added.
      */
+
+
 	public void addToPool(MailItem mailItem) {
 		Item item = new Item(mailItem);
 
-		pool.add(item);
-		pool.sort(new ItemComparator());
+		item.mailItem.estimateCharge();
+
+		if (item.mailItem.getCharge().getTotalCharge() > chargeThreshold){
+
+			priorityPool.add(item);
+			priorityPool.sort(new ItemComparator());
+		}
+		else {
+
+			pool.add(item);
+			pool.sort(new ItemComparator());
+		}
 	}
-	
-	
-	
+
+
+
 	/**
      * load up any waiting robots with mailItems, if any.
      */
@@ -155,10 +167,10 @@ public class MailPool {
 
 				it.remove();
 				priorityPool.add(item);
-				priorityPool.sort(new ItemComparator());
 			}
-
 		}
+
+		priorityPool.sort(new ItemComparator());
 	}
 
 	/**
