@@ -11,6 +11,7 @@ public class Charge {
 	private double activity_units;
 	private double activity_cost;
 	private double service_fee;
+	private double total_cost;
 	private double total_charge;
 
 	public Charge() {
@@ -33,12 +34,12 @@ public class Charge {
 		return service_fee;
 	}
 
-	public double getActivityCost() {
-		return activity_cost;
-	}
-
 	public double getTotalCharge() {
 		return total_charge;
+	}
+	
+	public double getTotalCost() {
+		return total_cost;
 	}
 
 	public double calculateActivityUnits(int floors_moved) {
@@ -55,7 +56,8 @@ public class Charge {
 		activity_units = calculateActivityUnits(floors_moved);
 		activity_cost = roundTwoDecimalPlaces(activity_unit_price * activity_units);
 		service_fee = roundTwoDecimalPlaces(lookupServiceFee(destination_floor));
-		total_charge = roundTwoDecimalPlaces((service_fee + activity_cost + extra_cost) * (1 + markup_percentage));
+		total_cost = roundTwoDecimalPlaces(service_fee + activity_cost + extra_cost);
+		total_charge = roundTwoDecimalPlaces(total_cost * (1 + markup_percentage));
 	}
 
 	public double lookupServiceFee(int floor) {

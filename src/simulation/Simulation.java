@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 
-import com.unimelb.swen30006.wifimodem.WifiModem;
-
 import automail.Automail;
 import automail.Charge;
 import automail.MailItem;
@@ -181,7 +179,7 @@ public class Simulation {
 				// Calculate delivery score and other statistics
 				total_delay += calculateDeliveryDelay(deliveryItem);
 				total_billable_activity += deliveryItem.getCharge().getActivityUnits();
-				total_activity_cost += deliveryItem.getCharge().getActivityCost();
+				total_activity_cost += deliveryItem.getCharge().getTotalCost();
 				total_service_cost += deliveryItem.getCharge().getServiceFee();
 			} else {
 				try {

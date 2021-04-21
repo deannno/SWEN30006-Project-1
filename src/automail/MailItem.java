@@ -45,7 +45,7 @@ public class MailItem {
     public String printLog(boolean charge_display) {
     	String log = toString();
     	if (charge_display) {
-    		return log + String.format(" | Charge: %.2f | Cost: %.2f | Fee: %.2f | Activity: %.2f", charge.getTotalCharge(), charge.getActivityCost(), charge.getServiceFee(), charge.getActivityUnits());
+    		return log + String.format(" | Charge: %.2f | Cost: %.2f | Fee: %.2f | Activity: %.2f", charge.getTotalCharge(), charge.getTotalCost(), charge.getServiceFee(), charge.getActivityUnits());
     	}
     	return log;
     }
